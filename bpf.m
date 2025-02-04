@@ -18,5 +18,4 @@ b = [b0 b1 b2];
 % y = filter(b,a,x, [y0_bar 0]);
 y = filter(b,a,x);
 
-% aggiunto testo di prova per testare spostamento cartelle
 end
