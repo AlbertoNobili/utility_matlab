@@ -24,8 +24,9 @@ fs = 1/dt;             % Sample frequency
 n = length(x);         % Number of samples
 df = fs/n;	           % Frequency increment
 
+% Double-sided spectra
 f = (0:n-1)*df;             % Frequency range
-f0 = f-n/2; 
+f0 = f - n/2*df; 
 
 y = fft(x);                 % Discrete Fourier Transform (DFT)
 y0 = fftshift(y);                           
@@ -33,21 +34,23 @@ y0 = fftshift(y);
 ampl  = abs(y)/n;           % Amplitude spectrum  
 ampl0 = abs(y0)/n;
 
-power  = abs(y).^2/n;       % Power spectrum 
-power0 = abs(y0).^2/n;      
+power  = ampl.^2;           % Power spectrum 
+power0 = ampl0.^2;      
 
-psd  = abs(y).^2/(n*fs);    % Power Spectral Density
-psd0 = abs(y0).^2/(n*fs);
+psd  = power*(n/fs);        % Power Spectral Density
+psd0 = power0*(n/fs);
 
-% Single-sided amplitude spectrum
-ampl_ss = 1/n * [abs(y(1)), 2*abs(y(2:end/2+1)), abs(y(end/2+1))];
-f_ss = df*(0:(n-1)/2);
+% Single-sided spectra
+f_ss = df*(0:floor(n/2)+1);
+ampl_ss  = [ ampl(1),  2*ampl(2:floor(end/2)+1),  ampl(floor(end/2)+1)];
+power_ss = [power(1), 2*power(2:floor(end/2)+1), power(floor(end/2)+1)];
+psd_ss   = [  psd(1),   2*psd(2:floor(end/2)+1),   psd(floor(end/2)+1)];
 
-    
+% Plot results
+
 figure()
 plot(f0,ampl0)
 xlabel('Frequency [Hz]')
-ylabel('|y(f)| / N\_sample')
 title('Amplitude Spectrum')
 grid on
 grid minor
@@ -55,7 +58,6 @@ grid minor
 figure()
 plot(f0,power0)
 xlabel('Frequency [Hz]')
-ylabel('|y(f)|^2 / N\_sample')
 title('Power Spectrum')
 grid on
 grid minor
@@ -63,7 +65,7 @@ grid minor
 figure()
 plot(f0,mag2db(psd0))
 xlabel('Frequency [Hz]')
-ylabel('PSD [dB/Hz]')
+ylabel('PSD [db/Hz]')
 title('Power Spectral Density')
 grid on
 grid minor
@@ -74,4 +76,19 @@ xlabel('Frequency [Hz]')
 title('Single-sided Amplitude Spectrum')
 grid on
 grid minor
-    
+
+figure()
+plot(f_ss,power_ss)
+xlabel('Frequency [Hz]')
+title('Single-sided Power Spectrum')
+grid on
+grid minor
+
+figure()
+plot(f_ss, mag2db(psd_ss))
+xlabel('Frequency [Hz]')
+ylabel('PSD [db/Hz]')
+title('Single-sided Power Spectral Density')
+grid on
+grid minor
+
