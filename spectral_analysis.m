@@ -11,8 +11,8 @@ function [] = spectral_analysis(x, dt)
 % the original and the transformed signal.
 
 %% Other matlab functions:
-% - spectrogram: frequency analysis of non stationary signals (power
-% spectrum evolution with time)
+% - spectrogram: frequency analysis of non stationary signals (spectrogram is a visual representation of the
+% spectrum of frequencies as the signal evolve with time)
 % - pspectrum: frequency analysis of both stationary and non stationary
 % signals (computes both power spectrum and spectrogram)
 % - periodogram: psd estimate (periodogram is what a psd estimate is called
