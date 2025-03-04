@@ -18,10 +18,10 @@ for i = 1:num_windows
     % Compute PSD on the window
     [pxx, f] = pwelch(x_window, [], [], [], fs);
     % Plot PSD
-    figure()
-    plot(f,pxx)
-    xlabel('freq (Hz)');
-    title('psd');
+%     figure()
+%     plot(f,pxx)
+%     xlabel('freq (Hz)');
+%     title('psd');
     % Compute MF for the window
     MF(i) = sum(f .* pxx) / sum(pxx);
 end
