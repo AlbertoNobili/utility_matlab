@@ -1,4 +1,4 @@
-function [t, MNF] =  meanFrequency(x, fs, window_size, noverlap, plot_flag)
+function [t, MDF] =  medianFrequency(x, fs, window_size, noverlap, plot_flag)
 
 % fs: sampling frequency
 % window_size: length of each window
@@ -9,7 +9,7 @@ step = window_size - noverlap;        % step between windows
 num_windows = floor((length(x) - window_size) / step) + 1; % num of windows
 
 % Mean frequency vector computation
-MNF = zeros(1, num_windows);
+MDF = zeros(1, num_windows);
 for i = 1:num_windows
     idx_start = (i-1) * step + 1;
     idx_end = idx_start + window_size - 1;
@@ -22,8 +22,10 @@ for i = 1:num_windows
 %     plot(f,pxx)
 %     xlabel('freq (Hz)');
 %     title('psd');
-    % Compute MNF for the window
-    MNF(i) = sum(f .* pxx) / sum(pxx);
+    % Compute MDF for the window
+    Pcum = cumsum(pxx);
+    idx = find(Pcum >= Pcum(end)/2, 1);
+    MDF(i) = f(idx);
 end
 
 % Time vector creation
@@ -32,7 +34,7 @@ t = step/(2*fs) + (0:num_windows-1) * step/fs;
 % Plot result
 if plot_flag == true
     figure()
-    plot(t, MNF, '-o')
+    plot(t, MDF, '-o')
     xlabel('Tempo (s)')
     ylabel('Frequenza Media (Hz)')
     title('Andamento della Frequenza Media nel Tempo')
